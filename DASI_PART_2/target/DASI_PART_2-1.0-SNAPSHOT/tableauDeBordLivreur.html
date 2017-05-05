@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Gustat'IF - Liste des Restaurants</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <script src="//code.jquery.com/jquery-1.12.1.min.js"></script>
+    </head>
+    <body>
+    <div id="test"></div>
+    
+    <h1>Tableau de bord livreur</h1>
+
+    <div id="descCommande"></div>
+    
+    <input type="button" id="validerLivraison" value="Valider la livraison"> 
+    
+    <span id="erreurValidation"></span>
+
+        <script>
+
+           $("#test").html(readCookie("idLivreur"));
+           
+            $("#validerLivraison").click(function() {
+                
+                $.ajax({    
+                    url: './ActionServlet',
+                    type: 'POST',
+                    data: {
+                        action: 'confirmerLivraisonLivreur',
+                        idLivreur: readCookie("idLivreur")
+                    },
+                    dataType: 'json'
+                    })
+                    .done(function(data) {
+                         window.location="tableauDeBordLivreur.html";
+                    })
+                    .fail(function() {
+                         $("#erreurValidation").html("Erreur de validation");
+                    })
+                    .always(function() {
+                        //
+                    });
+            });
+
+           
+           $(function() {
+                    $.ajax({    
+                    url: './ActionServlet',
+                    type: 'POST',
+                    data: {
+                        action: 'recupCommandeLivreur',
+                        idLivreur: readCookie("idLivreur")
+                    },
+                    dataType: 'json'
+                    })
+                    .done(function(data) {
+                         var arrayProduits = data.produits;
+                 
+                         if(data.vide==0){
+                             $("#descCommande").html("Aucune livraison en cours.");
+                             return;
+                         }
+                         var contenuHtml = "Livraison en cours : <br>";
+                         contenuHtml += "Client : " + data.client + " <br>";
+                         contenuHtml += "Adresse : " + data.adresse + " <br>";
+                         contenuHtml += "Prix : " + data.prix + " <br>";
+                         contenuHtml += "Poids : " + data.poids + " <br>";
+                         contenuHtml += "Commande : <br>";
+
+                         var i;
+                         for (i = 0; i < arrayProduits.length; i++) {
+                            contenuHtml += arrayProduits[i].denomination + "*" + arrayProduits[i].nb + "<br>";
+                         }
+                         
+                         $("#descCommande").html(contenuHtml);
+
+                    })
+                    .fail(function() {
+                         $("#descCommande").html("Erreur de chargement");
+                    })
+                    .always(function() {
+                        //
+                    });
+                });
+               
+            function readCookie(name) {
+                    var nameEQ = name + "=";
+                    var ca = document.cookie.split(';');
+                    for(var i=0;i < ca.length;i++) {
+                            var c = ca[i];
+                            while (c.charAt(0)===' ') c = c.substring(1,c.length);
+                            if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length,c.length);
+                    }
+                    return null;
+            }
+        </script>
+    </body>
+</html>

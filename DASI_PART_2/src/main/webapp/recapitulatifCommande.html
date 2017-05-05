@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Gustat'IF - Liste des Restaurants</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <script src="//code.jquery.com/jquery-1.12.1.min.js"></script>
+    </head>
+    <body>
+    <div id="test"></div>
+    
+    <h1>Resumé de la commande</h1>
+
+     <div id='descRestaurant'>
+            <span>chargement en cours...</span>
+     </div>
+    
+    <h2>Vos produits commandés</h2>
+    
+    <div id="choixProduits">
+         <span>chargement en cours...</span>
+    </div>
+    
+   <h2>Détails sur la livraison</h2>
+    
+    <div id="detailLivraison">
+         <span>chargement en cours...</span>
+    </div>
+    
+    <input type="button" id="annulerCommande" value="Annuler la commande"> 
+    <input type="button" id="confirmerCommande" value="Confirmer la commande"> 
+
+
+        <script>
+            
+            
+           $("#confirmerCommande").click(function() {
+               
+                    var idCommande = parent.document.URL.substring(parent.document.URL.indexOf('=')+1,parent.document.URL.length);
+
+                    $.ajax({    
+                    url: './ActionServlet',
+                    type: 'POST',
+                    data: {
+                        action: 'confirmCommande',
+                        idCommande : idCommande
+                    },
+                    dataType: 'json'
+                    })
+                    .done(function(data) {
+                        
+                        if(data.idCom!==-1)
+                            window.location = "confirmationOK.html";
+                        else
+                            window.location = "confirmationEchouee.html";
+                        
+                    })
+                    .fail(function() {
+                        window.location = "confirmationEchouee.html";
+                    })
+                    .always(function() {
+                        //
+                    });
+                });
+                
+                $("#annulerCommande").click(function() {
+               
+                    var idCommande = parent.document.URL.substring(parent.document.URL.indexOf('=')+1,parent.document.URL.length);
+
+                    $.ajax({    
+                    url: './ActionServlet',
+                    type: 'POST',
+                    data: {
+                        action: 'cancelCommande',
+                        idCommande : idCommande
+                    },
+                    dataType: 'json'
+                    })
+                    .done(function(data) {
+                        window.location="selectionRestaurant.html"
+                    })
+                    .fail(function() {
+                        window.location = "selectionRestaurant.html";
+                    })
+                    .always(function() {
+                        //
+                    });
+                });
+ 
+
+            $(function() {
+                
+                 var idCommande = parent.document.URL.substring(parent.document.URL.indexOf('=')+1,parent.document.URL.length);
+
+                
+                 $.ajax({
+                    url: './ActionServlet',
+                    type: 'POST',
+                    data: {
+                        action: 'getInfosCommande',
+                        idCommande: idCommande
+                    },
+                    dataType: 'json'
+                })
+                .done(function(data) {
+                    
+                
+                    var infoResto = data.restaurant;
+                    var arrayProduits = data.produits;
+                    var infoLivraison=data.livraison;
+                    
+                    var contenuHtmlResto = "<b>" + infoResto.denomination + "</b><br>";
+                    contenuHtmlResto += infoResto.adresse + " <br>";
+                    contenuHtmlResto += infoResto.description + " <br><br>";
+                    
+                    $('#descRestaurant').html(contenuHtmlResto);
+                    
+                    
+                    var contenuHtmlProduit = '<p>';
+                    var i;
+                    for (i = 0; i < arrayProduits.length; i++) {
+                        contenuHtmlProduit += arrayProduits[i].denomination + "<br>";
+                        contenuHtmlProduit += "Quantité : " + arrayProduits[i].nb + "<br>"; 
+                        contenuHtmlProduit += "Description : " + arrayProduits[i].description + " <br>";
+                        contenuHtmlProduit += 'Prix unitaire : '+ arrayProduits[i].prix + ' €<br>';
+                        contenuHtmlProduit += 'Prix total : ' + arrayProduits[i].nb*arrayProduits[i].prix +'€ <br><br>';
+                    }
+                    contenuHtmlProduit += '</p>';
+                    $('#choixProduits').html(contenuHtmlProduit);
+                    
+                    var contenuHtmlLivraison = "Durée estimée de la livraison : " + infoLivraison.temps + " minutes<br>";
+                    contenuHtmlLivraison += "Poids total de la livraison : " + infoLivraison.poids + " kg<br>";                    
+                    contenuHtmlLivraison += "Livreur : " + infoLivraison.livreur + "<br>";                    
+
+                    $('#detailLivraison').html(contenuHtmlLivraison);
+                   
+                });
+              });
+            
+        </script>
+    </body>
+</html>

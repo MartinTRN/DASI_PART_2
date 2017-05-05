@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Gustat'IF - Liste des Restaurants</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <script src="//code.jquery.com/jquery-1.12.1.min.js"></script>
+    </head>
+    <body>
+    <div id="test"></div>
+    
+    <h1>Vous avez choisi : </h1>
+
+     <div id='descRestaurant'>
+            <span>chargement en cours...</span>
+     </div>
+    
+    <div id="listeMenu">
+        
+    </div>
+
+    <input type="button" id="validerCommande" value="Valider la commande"> 
+
+
+        <script>
+            
+           var idResto = parent.document.URL.substring(parent.document.URL.indexOf('=')+1,parent.document.URL.length);
+            
+           $("#validerCommande").click(function() {
+                    
+                    console.log("test");
+
+                
+                    var obj = new Object();
+        
+                    var array = new Array();
+                    $('input[name=quantiteProduit]').each(function(){
+                        
+                        if($(this).val()!=='')
+                        {
+                            var obj2 = new Object();
+                            obj2.nb = $(this).val();
+                            obj2.id = $(this).attr('id');
+                            array.push(obj2);
+                        }
+                    });
+                    
+                    obj.array = array;
+                    
+                    $.ajax({    
+                    url: './ActionServlet',
+                    type: 'POST',
+                    data: {
+                        action: 'submitCommande',
+                        idResto: idResto,
+                        idClient: readCookie("idClient"),
+                        produit: JSON.stringify(obj)
+                    },
+                    dataType: 'json'
+                    })
+                    .done(function(data) {
+                     
+                     if(data.idCom===-1)
+                        window.location = "recapitulatifEchoue.html";
+                     else
+                        window.location = "recapitulatifCommande.html?idCommande="+data.idCom;
+                        
+                    })
+                    .fail(function() {
+                        window.location = "recapitulatifEchoue.html";
+                    })
+                    .always(function() {
+                        //
+                    });
+                });
+ 
+            
+            $(function() {
+                $.ajax({
+                    url: './ActionServlet',
+                    type: 'POST',
+                    data: {
+                        action: 'recupInfosResto',
+                        idResto: idResto // etc.
+                    },
+                    dataType: 'json'
+                })
+                .done(function(data) {
+                    var restaurants = data.restaurants;
+                    var contenuHtml = '<b>';
+                    contenuHtml += restaurants.denomination + '</b>' + '</br>';
+                    contenuHtml += restaurants.description + '</br>';
+                    $('#descRestaurant').html(contenuHtml);
+
+                })
+                .fail(function() {
+                    $('#descRestaurant').html('ERREUR de chargement');
+                })
+                .always(function() {
+                    //
+                });
+
+            });
+
+            $(function() {
+                
+                 $.ajax({
+                    url: './ActionServlet',
+                    type: 'POST',
+                    data: {
+                        action: 'listeMenu',
+                        idResto: idResto
+                    },
+                    dataType: 'json'
+                })
+                .done(function(data) {
+                    var produits = data.produits;
+                    var contenuHtml = '<p>';
+                    var i;
+                    for (i = 0; i < produits.length; i++) {
+                        contenuHtml += produits[i].denomination + "<br>";
+                        contenuHtml += 'quantité : <input type="text" name="quantiteProduit" id="' +produits[i].id+'"><br>'; 
+                        contenuHtml += "Description : " + produits[i].description + " <br>";
+                        contenuHtml += 'Prix unitaire : <span id="unitaire'+produits[i].id+'">'+ produits[i].prix + '</span> €<br>';
+                        contenuHtml += 'Prix total : <span id="total'+produits[i].id +'">0 </span> € <br><br><br>';
+
+                    }
+                    contenuHtml += '</p>';
+                    $('#listeMenu').html(contenuHtml);
+                    
+                    $("input[name='quantiteProduit']").on("input",function(e){
+                    if($(this).data("lastval")!== $(this).val()){
+                        $(this).data("lastval",$(this).val());
+                        
+                        var idSelec = $(this).attr('id');
+                        
+                        var prix = $('#unitaire'+idSelec).html()*$(this).val();
+                        
+                        $('#total'+ idSelec).html(prix);
+                        
+                    };
+                   });
+
+                })
+                .fail(function() {
+                    $('#listeMenu').html('ERREUR de chargement');
+                })
+                .always(function() {
+                    //
+                });
+            });
+               
+            function readCookie(name) {
+                    var nameEQ = name + "=";
+                    var ca = document.cookie.split(';');
+                    for(var i=0;i < ca.length;i++) {
+                            var c = ca[i];
+                            while (c.charAt(0)===' ') c = c.substring(1,c.length);
+                            if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length,c.length);
+                    }
+                    return null;
+            }
+            
+            
+        </script>
+    </body>
+</html>

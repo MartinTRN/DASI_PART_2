@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Gustat'IF - Liste des Restaurants</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <script src="//code.jquery.com/jquery-1.12.1.min.js"></script>
+    </head>
+    <body>
+        <h1>
+            Se connecter
+        </h1>
+        
+        <h2>
+            Se connecter en tant que :
+        </h2>
+        
+         <INPUT type="radio" name="typeConnexion" value="Client"> Client <br>
+         <INPUT type="radio" name="typeConnexion" value="Livreur"> Livreur <br>
+        
+        <br>
+        <div> Adresse mail :   <input type="text" id="adresseMail"><br><br>
+
+            <input type="button" id="connecter" value="Se connecter"> 
+            
+            <div id="erreur"></div>
+            
+        <script>
+
+            $("#connecter").click(function() {
+                
+                
+                var adresse = $('#adresseMail').val();
+                var action;
+                
+                
+                if($('input[name=typeConnexion]:checked').val()==="Client"){
+                  action ="recupClient";}
+                else{
+                  action = "recupLivreur";}
+              
+                    $.ajax({
+                    url: './ActionServlet',
+                    type: 'POST',
+                    data: {
+                        action: action,
+                        adresse: adresse
+                    },
+                    dataType: 'json'
+                    })
+                    .done(function(data) {
+                        
+                        if($('input[name=typeConnexion]:checked').val()==="Client"){
+                        var clientID = data.idClient;
+                        createCookie("idClient",clientID,1);
+                        window.location = "selectionRestaurant.html";}
+                        else{
+                        var livreurID = data.idLivreur;
+                        createCookie("idLivreur",livreurID,1);
+                        window.location = "tableauDeBordLivreur.html";}
+                        
+                    })
+                    .fail(function() {
+                        $('#erreur').html('Email invalide');
+                    })
+                    .always(function() {
+                        //
+                    });
+                });
+                
+                
+            
+            
+            
+            function createCookie(name,value,days) {
+                    if (days) {
+                            var date = new Date();
+                            date.setTime(date.getTime()+(days*24*60*60*1000));
+                            var expires = "; expires="+date.toGMTString();
+                    }
+                    else var expires = "";
+                    document.cookie = name+"="+value+expires+"; path=/";
+            }
+
+            function readCookie(name) {
+                    var nameEQ = name + "=";
+                    var ca = document.cookie.split(';');
+                    for(var i=0;i < ca.length;i++) {
+                            var c = ca[i];
+                            while (c.charAt(0)===' ') c = c.substring(1,c.length);
+                            if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length,c.length);
+                    }
+                    return null;
+            }
+
+            function eraseCookie(name) {
+                    createCookie(name,"",-1);
+            }
+
+        </script>
+    </body>
+</html>
