@@ -26,7 +26,7 @@ public class Main {
         JpaUtil.ouvrirTransaction();
         
         ServiceMetier sm = new ServiceMetier();
-        sm.init();
+        //sm.init();
         
         ClientDAO cdao = new ClientDAO();
         System.out.println(cdao.findByEmail("adresse@insa.com"));

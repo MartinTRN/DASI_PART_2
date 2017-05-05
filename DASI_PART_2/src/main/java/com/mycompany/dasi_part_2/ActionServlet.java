@@ -1,4 +1,4 @@
-/*
+    /*
 * To change this license header, choose License Headers in Project Properties.
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
@@ -15,6 +15,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -51,15 +52,23 @@ public class ActionServlet extends HttpServlet {
                     break; 
                  
                 case("recupClient") :
-                    json = Action.getClientByAdresse(req.getParameter("adresse"));
-                    break;  
-                   
+                    json = Action.getClientByAdresse(req.getParameter("adresse"),req.getSession());
+                    break;
+                    
+                case("recupNomPrenom") :
+                   json = Action.getNomPrenomClient(req.getSession());
+                    break;
+                    
+                case("recupNomPrenomLivreur") :
+                   json = Action.getNomPrenomLivreur(req.getSession());
+                    break;
+                    
                 case("recupLivreur") :
-                    json = Action.getLivreurByAdresse(req.getParameter("adresse"));
+                    json = Action.getLivreurByAdresse(req.getParameter("adresse"),req.getSession());
                     break; 
                     
                 case("submitCommande") :
-                    json = Action.submitCommande(req.getParameter("idResto"),req.getParameter("idClient"),req.getParameter("produit"));
+                    json = Action.submitCommande(req.getParameter("idResto"),req.getSession(),req.getParameter("produit"));
                     break;   
                     
                 case("getInfosCommande") :
@@ -75,11 +84,11 @@ public class ActionServlet extends HttpServlet {
                 break;
                 
                 case("recupCommandeLivreur") :
-                    json = Action.getInfoCommandeLivreur(req.getParameter("idLivreur"));
+                    json = Action.getInfoCommandeLivreur(req.getSession());
                 break;
                 
                 case("confirmerLivraisonLivreur") :
-                    json = Action.validerLivraisonLivreur(req.getParameter("idLivreur"));
+                    json = Action.validerLivraisonLivreur(req.getSession());
                 break;
                 
                 default: 

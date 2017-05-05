@@ -14,8 +14,33 @@
     <div id="listeRestaurants"></div>
         <script>
 
-            $(function() {
-                $("#test").html(readCookie("idClient"));
+            $(function(){
+                
+                 $.ajax({
+                    url: './ActionServlet',
+                    type: 'POST',
+                    data: {
+                        action: 'recupNomPrenom'
+                    },
+                    dataType: 'json'
+                })
+                .done(function(data) {
+                    var nom = data.nomClient;
+                    
+                    $('#test').html(nom);
+                    LoadRestos();
+                    
+                })
+                .fail(function() {
+                    $('#listeRestaurants').html('ERREUR de chargement');
+                })
+                .always(function() {
+                    //
+                });
+            });
+
+            function LoadRestos() {
+                //$("#test").html(readCookie("idClient"));
                 
                  $.ajax({
                     url: './ActionServlet',
@@ -47,7 +72,7 @@
                 .always(function() {
                     //
                 });
-            });
+            }
                
             function readCookie(name) {
                     var nameEQ = name + "=";

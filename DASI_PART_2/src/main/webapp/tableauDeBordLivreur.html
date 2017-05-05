@@ -18,8 +18,6 @@
     <span id="erreurValidation"></span>
 
         <script>
-
-           $("#test").html(readCookie("idLivreur"));
            
             $("#validerLivraison").click(function() {
                 
@@ -28,7 +26,6 @@
                     type: 'POST',
                     data: {
                         action: 'confirmerLivraisonLivreur',
-                        idLivreur: readCookie("idLivreur")
                     },
                     dataType: 'json'
                     })
@@ -45,12 +42,36 @@
 
            
            $(function() {
-                    $.ajax({    
+                    $.ajax({
+                    url: './ActionServlet',
+                    type: 'POST',
+                    data: {
+                        action: 'recupNomPrenomLivreur'
+                    },
+                    dataType: 'json'
+                })
+                .done(function(data) {
+                    var nom = data.nomLivreur;
+                    
+                    $('#test').html(nom);
+                    loadLivraisonsEnCours();
+                    
+                })
+                .fail(function() {
+                    $('#listeRestaurants').html('ERREUR de chargement');
+                })
+                .always(function() {
+                    //
+                });
+            });
+
+                
+            function loadLivraisonsEnCours(){
+                 $.ajax({    
                     url: './ActionServlet',
                     type: 'POST',
                     data: {
                         action: 'recupCommandeLivreur',
-                        idLivreur: readCookie("idLivreur")
                     },
                     dataType: 'json'
                     })
@@ -82,7 +103,7 @@
                     .always(function() {
                         //
                     });
-                });
+            }
                
             function readCookie(name) {
                     var nameEQ = name + "=";

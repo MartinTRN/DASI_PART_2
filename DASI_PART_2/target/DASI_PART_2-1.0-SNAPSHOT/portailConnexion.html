@@ -51,12 +51,8 @@
                     .done(function(data) {
                         
                         if($('input[name=typeConnexion]:checked').val()==="Client"){
-                        var clientID = data.idClient;
-                        createCookie("idClient",clientID,1);
                         window.location = "selectionRestaurant.html";}
                         else{
-                        var livreurID = data.idLivreur;
-                        createCookie("idLivreur",livreurID,1);
                         window.location = "tableauDeBordLivreur.html";}
                         
                     })

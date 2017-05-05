@@ -14,6 +14,7 @@ import com.google.gson.JsonParser;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import javax.servlet.http.HttpSession;
 import metier.modele.Client;
 import metier.modele.Commande;
 import metier.modele.Drone;
@@ -76,12 +77,14 @@ public class Action {
        return json;
     }
 
-    static String getClientByAdresse(String parameter) {
+    static String getClientByAdresse(String parameter,HttpSession session) {
                 ServiceMetier sm = new ServiceMetier();
                                 
                 System.out.println(parameter);
                 
                 Client connectClient = sm.connectClient(parameter);
+                
+                session.setAttribute("client", connectClient);
                 
                 JsonObject racine = new JsonObject();
                 racine.addProperty("idClient", connectClient.getId());
@@ -92,12 +95,14 @@ public class Action {
                 return json;
     }
 
-    static String getLivreurByAdresse(String parameter) {
+    static String getLivreurByAdresse(String parameter,HttpSession session) {
                 ServiceMetier sm = new ServiceMetier();
                 
                 System.out.println(parameter);
                 
                 Livreur connectLivreur = sm.connectLivreur(parameter);
+                
+                session.setAttribute("livreur", connectLivreur);
                 
                 JsonObject racine = new JsonObject();
                 racine.addProperty("idLivreur", connectLivreur.getId());
@@ -132,11 +137,11 @@ public class Action {
                return json;
     }
 
-    static String submitCommande(String idResto, String idClient, String lProduits) throws Exception {
+    static String submitCommande(String idResto, HttpSession session, String lProduits) throws Exception {
               
         ServiceMetier sm = new ServiceMetier();
         
-        Client client = sm.getClientById(Long.valueOf(idClient));
+        Client client = (Client)session.getAttribute("client");
         
         Restaurant resto = sm.getRestaurantById(Long.valueOf(idResto));
         
@@ -272,11 +277,11 @@ public class Action {
 
                 return json;    }
 
-    static String getInfoCommandeLivreur(String parameter) throws Exception {
+    static String getInfoCommandeLivreur(HttpSession session) throws Exception {
                  ServiceMetier sm = new ServiceMetier();
                 List<Commande> livraisonsEnCours = sm.getLivraisonsEnCours();
                 
-                Livreur livreur = sm.getLivreurById(Long.valueOf(parameter));
+                Livreur livreur = (Livreur)session.getAttribute("livreur");
                 
                 JsonObject obj = new JsonObject();;
                 
@@ -314,11 +319,11 @@ public class Action {
                         return json;
     }
 
-    static String validerLivraisonLivreur(String parameter) throws Exception {
+    static String validerLivraisonLivreur(HttpSession session) throws Exception {
                 ServiceMetier sm = new ServiceMetier();
                                 
                 List<Commande> livraisonsEnCours = sm.getLivraisonsEnCours();
-                Livreur livreur = sm.getLivreurById(Long.valueOf(parameter));
+                Livreur livreur = (Livreur)session.getAttribute("livreur");
 
                 for(Commande c : livraisonsEnCours)
                 {
@@ -337,5 +342,42 @@ public class Action {
 
                 return json;  
     }
+
+    static String getNomPrenomClient(HttpSession session) {
+        
+                ServiceMetier sm = new ServiceMetier();
+                                                                
+                Client client = (Client)session.getAttribute("client");
+                
+                JsonObject racine = new JsonObject();
+                racine.addProperty("nomClient", client.getPrenom() + " " + client.getNom());
+                
+                Gson gsonOb = new GsonBuilder().setPrettyPrinting().create();
+                String json = gsonOb.toJson(racine);
+                
+                return json;
+    }
+
+    static String getNomPrenomLivreur(HttpSession session) {
+                ServiceMetier sm = new ServiceMetier();
+                                                                
+                Livreur livreur = (Livreur)session.getAttribute("livreur");
+                
+                JsonObject racine = new JsonObject();
+                
+                if(livreur instanceof Drone)
+                {
+                    racine.addProperty("nomLivreur",livreur.getId());
+                }
+                else
+                {
+                    Employe e = (Employe)livreur;
+                    racine.addProperty("nomLivreur",e.getNom() + " " + e.getPrenom());
+                }   
+                
+                Gson gsonOb = new GsonBuilder().setPrettyPrinting().create();
+                String json = gsonOb.toJson(racine);
+                
+                return json;    }
     
 }
