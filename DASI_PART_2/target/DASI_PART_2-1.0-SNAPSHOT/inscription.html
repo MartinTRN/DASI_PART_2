@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Gustat'IF - Liste des Restaurants</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <script src="//code.jquery.com/jquery-1.12.1.min.js"></script>
+    </head>
+    <body>
+        
+        
+        <div> Nom :   <input type="text" id="nom"><br><br>            
+        <div> Prénom :   <input type="text" id="prenom"><br><br>
+        <div> Adresse mail :   <input type="text" id="adresseMail"><br><br>
+        <div> Adresse :   <input type="text" id="adresse"><br><br>
+
+        <input type="button" id="inscription" value="S'inscrire"> 
+    
+            
+        <div id="inscription"></div>
+            
+        <script>
+
+            $("#connecter").click(function() {
+                
+                var nom = $('#nom').val();
+                var prenom = $('#prenom').val();
+                var adresse_mail = $('#adresseMail').val();
+                var adresse = $('#adresse').val();
+              
+                    $.ajax({
+                    url: './ActionServlet',
+                    type: 'POST',
+                    data: {
+                        action: "inscriptionUtilisateur",
+                        adresse: adresse,
+                        nom : nom,
+                        prenom: prenom,
+                        mail: adresse_mail
+                    },
+                    dataType: 'json'
+                    })
+                    .done(function(data) {
+                        
+                        if($('input[name=typeConnexion]:checked').val()==="Client"){
+                        window.location = "selectionRestaurant.html";}
+                        else{
+                        window.location = "tableauDeBordLivreur.html";}
+                        
+                    })
+                    .fail(function() {
+                        $('#erreur').html('Email invalide');
+                    })
+                    .always(function() {
+                        //
+                    });
+                });
+                
+                
+            
+            
+            
+            function createCookie(name,value,days) {
+                    if (days) {
+                            var date = new Date();
+                            date.setTime(date.getTime()+(days*24*60*60*1000));
+                            var expires = "; expires="+date.toGMTString();
+                    }
+                    else var expires = "";
+                    document.cookie = name+"="+value+expires+"; path=/";
+            }
+
+            function readCookie(name) {
+                    var nameEQ = name + "=";
+                    var ca = document.cookie.split(';');
+                    for(var i=0;i < ca.length;i++) {
+                            var c = ca[i];
+                            while (c.charAt(0)===' ') c = c.substring(1,c.length);
+                            if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length,c.length);
+                    }
+                    return null;
+            }
+
+            function eraseCookie(name) {
+                    createCookie(name,"",-1);
+            }
+
+        </script>
+    </body>
+</html>

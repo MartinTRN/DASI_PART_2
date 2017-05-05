@@ -44,6 +44,8 @@ public class Action {
             jsonResto.addProperty("denomination",r.getDenomination());
             jsonResto.addProperty("description",r.getDescription());
             jsonResto.addProperty("adresse",r.getAdresse());
+            jsonResto.addProperty("latitude",r.getLatitude());
+            jsonResto.addProperty("longitude",r.getLongitude());
             
             jsonArray.add(jsonResto);
         }
