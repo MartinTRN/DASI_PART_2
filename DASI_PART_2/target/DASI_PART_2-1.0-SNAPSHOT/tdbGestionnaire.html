@@ -9,19 +9,19 @@
 			#map { height: 100%; }
         </style>
         <script src="https://code.jquery.com/jquery-1.12.1.min.js"></script>
-		
-		
+
+
     </head>
-	
-	
+
+
     <body>
 		<div id="title" align="center" style="margin-bottom: 15px; margin-top: 15px;">Tableau de bord Gestionnaire</div>
-		
+
 		<div id="tab" style="margin-bottom: 20px; margin-left: 5px; margin-right: 5px;">
 			<table border="1" style="width: 100%;">
 				<tr bgcolor="Grey">
 					<th>Livreur</th>
-					<th>Statut</th> 
+					<th>Statut</th>
 					<th>Lieu de départ</th>
 					<th>Lieu d'arrivée</th>
 					<th>Client</th>
@@ -30,36 +30,36 @@
 				</tr>
 				<tr>
 					<td>Jill</td>
-					<td>Smith</td> 
+					<td>Smith</td>
 					<td>50</td>
 				</tr>
 				<tr>
 					<td>Eve</td>
-					<td>Jackson</td> 
+					<td>Jackson</td>
 					<td>94</td>
-				</tr>	
+				</tr>
 			</table>
-		
+
 		</div>
-		
+
 		<div id="map" style="float: left; width: 70%;"></div>
-		
+
 		<div id="mapform" align="left" style="float: right; width: 30%;">
 			<div style="margin-left: 30px;">
-				<div style="width: 245px;"><input type="checkbox" id="voirLivreurs" value="check1"> Voir le lieu de départ des livreurs </br></br></div>
-				
+				<div style="width: 245px;"><input type="checkbox" id="voirLivreurs" value="check1" onchange="chargerLivreurs()"> Voir le lieu de départ des livreurs </br></br></div>
+
 				<div style="width: 245px;"><input type="checkbox" id="voirRestaurants" value="check1" onchange="chargerRestos()"> Voir les restaurants </br></br></div>
-				
-				<div style="width: 245px;"><input type="checkbox" id="voirClients" value="check1"> Voir les clients </br></br></div>
-				
+
+				<div style="width: 245px;"><input type="checkbox" id="voirClients" value="check1" onchange="chargerClients()"> Voir les clients </br></br></div>
+
 				<div style="width: 245px;"><input type="button" id="voirDrones" value="Voir validation des drones" style="width: 245px;" onclick="window.location.href='validationDrones.html'"></div>
 			</div>
 		</div>
-			
-	
-		
+
+
+
 		<script type="text/javascript" src="map.js"></script>
 		<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAklw96N9rLd93ubr-F04CN7qi2ryKayAc&callback=initMap"></script>
-		
+
     </body>
 </html>

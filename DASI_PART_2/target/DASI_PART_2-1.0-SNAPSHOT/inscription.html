@@ -5,23 +5,55 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width">
         <script src="//code.jquery.com/jquery-1.12.1.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        
-        
-        <div> Nom :   <input type="text" id="nom"><br><br>            
-        <div> Prénom :   <input type="text" id="prenom"><br><br>
-        <div> Adresse mail :   <input type="text" id="adresseMail"><br><br>
-        <div> Adresse :   <input type="text" id="adresse"><br><br>
+        <h1 class="text-center">Inscription</h1>
+        <div class="container">   
+            <div class="row" style="margin-top:10px">
+                    <div class="col-md-2" style="margin-left: -125px" >
+                     Adresse mail :    
+                    </div>
+                    <div class="col-md-1">
+                             <input type="text" id="adresseMail">
+                    </div>
+            </div>   
+             <div class="row"  style="margin-top:10px">
+                    <div class="col-md-2" style="margin-left: -125px">
+                         Nom : 
+                    </div>
+                    <div class="col-md-1">
+                         <input type="text" id="nom">
+                    </div>
+            </div>
+            <div class="row"  style="margin-top:10px">
+                    <div class="col-md-2" style="margin-left: -125px">
+                         Prénom : 
+                    </div>
+                    <div class="col-md-1">
+                         <input type="text" id="prenom">
+                    </div>
+            </div>
+            <div class="row"  style="margin-top:10px">             
+                    <div class="col-md-2" style="margin-left: -125px">
+                         Adresse : 
+                    </div>
+                    <div class="col-md-1">
+                         <input type="text" id="adresse">
+                    </div>
+             </div>
+            <div class="text-center big"><input   type="button" id="inscription" value="S'inscrire"> </div>
+       </div>
 
-        <input type="button" id="inscription" value="S'inscrire"> 
-    
             
-        <div id="inscription"></div>
+        <div id="inscriptionErreur"></div>
+        <footer><div class="text-center" style="font-size: 20px">GustatIF 2017</div></footer>
             
         <script>
 
-            $("#connecter").click(function() {
+            $("#inscription").click(function() {
                 
                 var nom = $('#nom').val();
                 var prenom = $('#prenom').val();
@@ -42,49 +74,23 @@
                     })
                     .done(function(data) {
                         
-                        if($('input[name=typeConnexion]:checked').val()==="Client"){
-                        window.location = "selectionRestaurant.html";}
+                       console.log(data.idClient); 
+                        
+                        if(data.idClient===-1){
+                        $('#inscriptionErreur').html('Erreur pendant l\'inscription');}
                         else{
-                        window.location = "tableauDeBordLivreur.html";}
+                        window.location = "portailConnexion.html";}
                         
                     })
                     .fail(function() {
-                        $('#erreur').html('Email invalide');
+                        $('#inscriptionErreur').html('Erreur pendant l\'inscription');
                     })
                     .always(function() {
                         //
                     });
                 });
-                
-                
-            
-            
-            
-            function createCookie(name,value,days) {
-                    if (days) {
-                            var date = new Date();
-                            date.setTime(date.getTime()+(days*24*60*60*1000));
-                            var expires = "; expires="+date.toGMTString();
-                    }
-                    else var expires = "";
-                    document.cookie = name+"="+value+expires+"; path=/";
-            }
-
-            function readCookie(name) {
-                    var nameEQ = name + "=";
-                    var ca = document.cookie.split(';');
-                    for(var i=0;i < ca.length;i++) {
-                            var c = ca[i];
-                            while (c.charAt(0)===' ') c = c.substring(1,c.length);
-                            if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length,c.length);
-                    }
-                    return null;
-            }
-
-            function eraseCookie(name) {
-                    createCookie(name,"",-1);
-            }
 
         </script>
+        
     </body>
 </html>

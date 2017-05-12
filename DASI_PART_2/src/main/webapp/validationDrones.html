@@ -1,24 +1,127 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
     <head>
-        <title>Gustat'IF - Carte</title>
+        <title>Gustat'IF - Liste des Restaurants</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width">
-        <style type="text/css">
-            html, body { height: 100%; margin: 0; padding: 0; }
-        </style>
-        <script src="https://code.jquery.com/jquery-1.12.1.min.js"></script>
-		
-		
+        <script src="//code.jquery.com/jquery-1.12.1.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="style.css">
     </head>
-	
-	
     <body>
-		<div id="title" align="center" style="margin-bottom: 15px; margin-top: 15px;">Validation des commandes des drones</div>
-			
-	
-		
-		
-		
+    <div id="test"></div>
+    
+    <h1 class="text-center">Validation des commandes des drones</h1>
+
+    <div id="descCommande" class=" container">
+    
+        
+    </div>
+    
+    <span id="erreurValidation"></span>
+
+        <script>
+           
+
+           
+           
+            $(function(){
+                 $.ajax({    
+                    url: './ActionServlet',
+                    type: 'POST',
+                    data: {
+                        action: 'recupCommandesDrones',
+                    },
+                    dataType: 'json'
+                    })
+                    .done(function(data) {
+                         var tab = data.commandes;
+                         if(tab.length===0)
+                         {
+                            $("#descCommande").html("Pas de commandes livrées par drones en cours");
+                            return;
+                         }
+                         
+                         var j;
+                         
+                         var contenuHtml="";
+                         
+                         for(j=0;j<tab.length;j++)
+                         {
+                            contenuHtml+='<div class="row" style="margin-top:10px">';
+                            contenuHtml +='<div class="col-md-5">';
+                            
+                            contenuHtml+= "Drone " + (j+1) + " : " + tab[j].id +"<br>"; 
+                            contenuHtml += "Client : " + tab[j].client + " <br>";
+                            contenuHtml += "Adresse : " + tab[j].adresse + " <br>";
+                            contenuHtml += "Prix : " + tab[j].prix + " <br>";
+                            contenuHtml += "Commande : <br>";
+                            
+                            var arrayProduits = tab[j].produits;
+                                
+                            var i;
+                            for (i = 0; i < arrayProduits.length; i++) {
+                               contenuHtml += arrayProduits[i].denomination + "*" + arrayProduits[i].nb + "<br>";
+                            }
+                            
+                            contenuHtml +="</div>"
+                            contenuHtml +='<div class="col-md-1">';
+                            contenuHtml+='<input type="button" id="' +tab[j].idCommande+'" style="margin-top: 55px" value="Valider la livraison"> '
+                            contenuHtml += '</div></div>'
+                            $("#descCommande").html(contenuHtml);
+                             
+                         }
+                         
+                          for(j=0;j<tab.length;j++)
+                          {
+                              id="#"+tab[j].idCommande;
+                              $(id).click(function(){
+                                  
+                                  console.log($(this).attr('id'));
+                                           
+                                          $.ajax({    
+                                              url: './ActionServlet',
+                                              type: 'POST',
+                                              data: {
+                                                  action: 'confirmerLivraisonDrone',
+                                                  idLivraison : $(this).attr('id')
+                                              },
+                                              dataType: 'json'
+                                              })
+                                              .done(function(data) {
+                                                if(data.idCommande===-1)
+                                                {
+                                                    $("#erreurValidation").html("Erreur de validation");                                                   
+                                                }
+                                                else
+                                                {
+                                                    window.location="tdbGesionnaire.html";
+                                                }
+                                              })
+                                              .fail(function() {
+                                                    $("#erreurValidation").html("Erreur de validation");
+                                              })
+                                              .always(function() {
+                                                  //
+                                              });
+                                });
+
+                         }
+                              
+               
+                        
+                         
+
+                    })
+                    .fail(function() {
+                         $("#descCommande").html("Erreur de chargement");
+                    })
+                    .always(function() {
+                        //
+                    });
+            });
+
+        </script>
     </body>
 </html>

@@ -1,16 +1,18 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html>
     <head>
         <title>Gustat'IF - Liste des Restaurants</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width">
         <script src="//code.jquery.com/jquery-1.12.1.min.js"></script>
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="style.css">
     </head>
     <body>
     <div id="test"></div>
     
-    <h1>Vous avez choisi : </h1>
-
+    <div class="container">
      <div id='descRestaurant'>
             <span>chargement en cours...</span>
      </div>
@@ -18,10 +20,18 @@
     <div id="listeMenu">
         
     </div>
+        <div class="row">
+            <div class="col-md-6 text-center">
+                <a class="btn btn-default text-center" href="selectionRestaurant.html">Revenir à nos restaurants</a>
+            </div>
+            <div class="col-md-6 text-center">
+                <input type="button" class="btn btn-default " id="validerCommande" value="Valider la commande">                 
+            </div>
+        </div>
 
-    <input type="button" id="validerCommande" value="Valider la commande"> 
-
-
+</div>
+<footer><div class="text-center" style="font-size: 20px">GustatIF 2017</div></footer>
+    
         <script>
             
            var idResto = parent.document.URL.substring(parent.document.URL.indexOf('=')+1,parent.document.URL.length);
@@ -86,9 +96,10 @@
                 })
                 .done(function(data) {
                     var restaurants = data.restaurants;
-                    var contenuHtml = '<b>';
-                    contenuHtml += restaurants.denomination + '</b>' + '</br>';
-                    contenuHtml += restaurants.description + '</br>';
+                    var contenuHtml = "<h1 class='text-center'>";
+                    contenuHtml += restaurants.denomination + '</h1>';
+                    contenuHtml += "<b>" + "Adresse : " + restaurants.adresse + '</b></br>';
+                    contenuHtml += "<b>" + "Description : " + restaurants.description + '</b>';
                     $('#descRestaurant').html(contenuHtml);
 
                 })
@@ -114,17 +125,20 @@
                 })
                 .done(function(data) {
                     var produits = data.produits;
-                    var contenuHtml = '<p>';
+                    var contenuHtml="";
                     var i;
                     for (i = 0; i < produits.length; i++) {
+                         contenuHtml += '<div class="row" style="margin-top:10px">';
+                        contenuHtml +='<div class="col-md-5">';
                         contenuHtml += produits[i].denomination + "<br>";
-                        contenuHtml += 'quantité : <input type="text" name="quantiteProduit" id="' +produits[i].id+'"><br>'; 
                         contenuHtml += "Description : " + produits[i].description + " <br>";
                         contenuHtml += 'Prix unitaire : <span id="unitaire'+produits[i].id+'">'+ produits[i].prix + '</span> €<br>';
                         contenuHtml += 'Prix total : <span id="total'+produits[i].id +'">0 </span> € <br><br><br>';
-
+                        contenuHtml += "</div>";
+                        contenuHtml +='<div class="col-md-3" style="margin-top: 28px; margin-left: 60px">';                        
+                        contenuHtml += 'Quantité : <input type="text" name="quantiteProduit" id="' +produits[i].id+'"><br>'; 
+                        contenuHtml += "</div></div>"
                     }
-                    contenuHtml += '</p>';
                     $('#listeMenu').html(contenuHtml);
                     
                     $("input[name='quantiteProduit']").on("input",function(e){

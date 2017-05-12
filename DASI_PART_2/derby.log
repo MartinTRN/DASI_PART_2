@@ -1,24 +1,7 @@
-Fri May 05 15:30:56 CEST 2017 : Apache Derby Network Server - 10.11.1.2 - (1629631) démarré et prêt à accepter les connexions sur le port 1527
+Fri May 12 09:12:47 CEST 2017 : Apache Derby Network Server - 10.11.1.2 - (1629631) démarré et prêt à accepter les connexions sur le port 1527
 ----------------------------------------------------------------
-Fri May 05 15:30:57 CEST 2017:
-Amorçage de Derby version The Apache Software Foundation - Apache Derby - 10.11.1.2 - (1629631) : instance a816c00e-015b-d8ce-6387-ffffd45fdef9 
-dans le répertoire de base de données C:\Users\martin\Desktop\Dossier\INSA\DASI\DASI_PART_2\DB-Gusta avec le chargeur de classe sun.misc.Launcher$AppClassLoader@6f94fa3e
-Chargé de file:/C:/Program%20Files/Java/jdk1.8.0_111/db/lib/derby.jar
-java.vendor=Oracle Corporation
-java.runtime.version=1.8.0_111-b14
-user.dir=C:\Program Files\Java\jdk1.8.0_111\db
-os.name=Windows 10
-os.arch=amd64
-os.version=10.0
-derby.system.home=C:\Users\martin\Desktop\Dossier\INSA\DASI\DASI_PART_2
-Chargeur de classe de la base de données démarré - derby.database.classpath = ''
-----------------------------------------------------------------
-Fri May 05 15:31:05 CEST 2017:
-Fermeture de l'instance a816c00e-015b-d8ce-6387-ffffd45fdef9 sur le répertoire de base de données C:\Users\martin\Desktop\Dossier\INSA\DASI\DASI_PART_2\DB-Gusta avec le chargeur de classe sun.misc.Launcher$AppClassLoader@6f94fa3e 
-Fri May 05 15:31:05 CEST 2017 Thread[DRDAConnThread_2,5,main] (DATABASE = DB-Gusta), (DRDAID = {2}), Arrêt de la base de données 'DB-Gusta'.
-----------------------------------------------------------------
-Fri May 05 15:32:49 CEST 2017:
-Amorçage de Derby version The Apache Software Foundation - Apache Derby - 10.11.1.2 - (1629631) : instance a65c80ac-015b-d8ce-6387-ffffd45fdef9 
+Fri May 12 09:12:48 CEST 2017:
+Amorçage de Derby version The Apache Software Foundation - Apache Derby - 10.11.1.2 - (1629631) : instance a816c00e-015b-fb80-a182-ffffd45fdef9 
 dans le répertoire de base de données C:\Users\martin\Desktop\Dossier\INSA\DASI\DASI_PART_2\DB-Gusta avec le chargeur de classe sun.misc.Launcher$AppClassLoader@6f94fa3e
 Chargé de file:/C:/Program%20Files/Java/jdk1.8.0_111/db/lib/derby.jar
 java.vendor=Oracle Corporation

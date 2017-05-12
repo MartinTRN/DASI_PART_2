@@ -38,6 +38,18 @@ public class ActionServlet extends HttpServlet {
             
             switch (req.getParameter("action"))
             {
+                case ("listClients"):
+                    json = Action.getClients();
+                    break;
+                    
+                case ("listLivreurs"):
+                    json = Action.getLivreurs();
+                    break;
+                
+                case ("recupItineraire"):
+                    json = Action.getItineraire(req.getParameter("idLivreur"));
+                    break;    
+                    
                 case("listRestos") :
                     json = Action.getRestos();
                     break;
@@ -91,6 +103,15 @@ public class ActionServlet extends HttpServlet {
                     json = Action.validerLivraisonLivreur(req.getSession());
                 break;
                 
+                 case("confirmerLivraisonDrone") :
+                    json = Action.validerLivraisonDrone(req.getParameter("idLivraison"));
+                break;
+                
+                case("inscriptionUtilisateur") :
+                    json = Action.inscrireUtilsiateur(req.getParameter("adresse"),req.getParameter("nom"),req.getParameter("prenom"),req.getParameter("mail"));
+                
+                case("recupCommandesDrones") :
+                    json = Action.recupererCommandesDrones();
                 default: 
                     break;
             }

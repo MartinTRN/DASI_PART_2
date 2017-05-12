@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context path="/DASI_PART_2">
+  <Resource auth="Container" driverClassName="org.apache.derby.jdbc.ClientDriver" maxActive="20" maxIdle="10" maxWait="-1" name="GUSTADB" password="root" type="javax.sql.DataSource" url="jdbc:derby://localhost:1527/DB-Gusta" username="root"/>
+</Context>
