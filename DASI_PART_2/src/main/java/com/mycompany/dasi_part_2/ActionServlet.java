@@ -15,7 +15,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -39,79 +38,80 @@ public class ActionServlet extends HttpServlet {
             switch (req.getParameter("action"))
             {
                 case ("listClients"):
-                    json = Action.getClients();
+                    json = ActionGestionnaire.getClients();
                     break;
                     
                 case ("listLivreurs"):
-                    json = Action.getLivreurs();
+                    json = ActionGestionnaire.getLivreurs();
                     break;
                 
                 case ("recupItineraire"):
-                    json = Action.getItineraire(req.getParameter("idLivreur"));
+                    json = ActionGestionnaire.getItineraire(req.getParameter("idLivreur"));
                     break;    
                     
                 case("listRestos") :
-                    json = Action.getRestos();
+                    json = ActionGestionnaire.getRestos();
                     break;
                     
                 case("listeMenu") :
-                    json = Action.menuResto(req.getParameter("idResto"));
+                    json = ActionClient.menuResto(req.getParameter("idResto"));
                     break;    
                     
                     
                 case("recupInfosResto") :
-                    json = Action.getInfoSurResto(req.getParameter("idResto"));
+                    json = ActionClient.getInfoSurResto(req.getParameter("idResto"));
                     break; 
                  
                 case("recupClient") :
-                    json = Action.getClientByAdresse(req.getParameter("adresse"),req.getSession());
+                    json = ActionAccueil.getClientByAdresse(req.getParameter("adresse"),req.getSession());
                     break;
                     
                 case("recupNomPrenom") :
-                   json = Action.getNomPrenomClient(req.getSession());
+                   json = ActionClient.getNomPrenomClient(req.getSession());
                     break;
                     
                 case("recupNomPrenomLivreur") :
-                   json = Action.getNomPrenomLivreur(req.getSession());
+                   json = ActionLivreur.getNomPrenomLivreur(req.getSession());
                     break;
                     
                 case("recupLivreur") :
-                    json = Action.getLivreurByAdresse(req.getParameter("adresse"),req.getSession());
+                    json = ActionAccueil.getLivreurByAdresse(req.getParameter("adresse"),req.getSession());
                     break; 
                     
                 case("submitCommande") :
-                    json = Action.submitCommande(req.getParameter("idResto"),req.getSession(),req.getParameter("produit"));
+                    json = ActionClient.submitCommande(req.getParameter("idResto"),req.getSession(),req.getParameter("produit"));
                     break;   
                     
                 case("getInfosCommande") :
-                    json = Action.getInfoSurCommande(req.getParameter("idCommande"));
+                    json = ActionClient.getInfoSurCommande(req.getParameter("idCommande"));
                     break;
                     
                 case("confirmCommande") :
-                    json = Action.confirmCommande(req.getParameter("idCommande"));
+                    json = ActionClient.confirmCommande(req.getParameter("idCommande"));
                 break;
                 
                 case("cancelCommande") :
-                    json = Action.cancelCommande(req.getParameter("idCommande"));
+                    json = ActionClient.cancelCommande(req.getParameter("idCommande"));
                 break;
                 
                 case("recupCommandeLivreur") :
-                    json = Action.getInfoCommandeLivreur(req.getSession());
+                    json = ActionLivreur.getInfoCommandeLivreur(req.getSession());
                 break;
                 
                 case("confirmerLivraisonLivreur") :
-                    json = Action.validerLivraisonLivreur(req.getSession());
+                    json = ActionLivreur.validerLivraisonLivreur(req.getSession());
                 break;
                 
                  case("confirmerLivraisonDrone") :
-                    json = Action.validerLivraisonDrone(req.getParameter("idLivraison"));
+                    json = ActionGestionnaire.validerLivraisonDrone(req.getParameter("idLivraison"));
                 break;
                 
                 case("inscriptionUtilisateur") :
-                    json = Action.inscrireUtilsiateur(req.getParameter("adresse"),req.getParameter("nom"),req.getParameter("prenom"),req.getParameter("mail"));
+                    json = ActionAccueil.inscrireUtilsiateur(req.getParameter("adresse"),req.getParameter("nom"),
+                            req.getParameter("prenom"),req.getParameter("mail"));
                 
                 case("recupCommandesDrones") :
-                    json = Action.recupererCommandesDrones();
+                    json = ActionGestionnaire.recupererCommandesDrones();
                 default: 
                     break;
             }
