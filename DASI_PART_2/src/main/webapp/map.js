@@ -1,7 +1,10 @@
 ﻿var map;
+var directionsService;
+var directionsDisplay;
 var restoMarkers = [];
 var clientsMarkers = [];
 var livreurMarkers = [];
+var itineraires = [];
 
 
 function makeInfoWindow(title) {
@@ -19,38 +22,17 @@ function attachInfoWindow(marker, infowindow, htmlDescription) {
 }
 
 function initMap() {
+	directionsService = new google.maps.DirectionsService;
+	directionsDisplay = new google.maps.DirectionsRenderer;
+
 	map = new google.maps.Map(document.getElementById('map'), {
 		center: {lat: 45.7601424, lng: 4.8961779},
 		zoom: 13
 	});
 
+	directionsDisplay.setMap(map);
+
 	var infowindow = makeInfoWindow('');
-
-	var marker = new google.maps.Marker({
-		map: map,
-		position: {lat: 45.782122, lng: 4.872735},
-		title: "Département IF, INSA de Lyon",
-		icon: {url: './image/bird.png', scaledSize: new google.maps.Size(32, 32)}
-	});
-
-	marker.addListener('click', function() {
-
-		infowindow.setContent('<div>Information: ' + marker.title + '</div>');
-		infowindow.open(map, marker);
-	});
-
-	var marker2 = new google.maps.Marker({
-		map: map,
-		position: {lat: 45.782592, lng: 4.878238},
-		title: "Entrée principale, INSA de Lyon",
-		icon: {url: './image/snake.png', scaledSize: new google.maps.Size(32, 32)}
-	});
-
-	marker2.addListener('click', function() {
-
-		infowindow.setContent('<div>Information: ' + marker2.title + '</div>');
-		infowindow.open(map, marker2);
-	});
 }
 
 function chargerRestos() {
@@ -201,4 +183,112 @@ function chargerLivreurs() {
 			livreurMarkers[i].setMap(null);
 		}
 	}
+}
+
+function chargerTab() {
+	var table = document.getElementById('tab').getElementsByTagName('tbody')[1];
+	while (table.firstChild) {
+    table.removeChild(table.firstChild);
+	}
+
+		$.ajax({
+			url: './ActionServlet',
+			type: 'POST',
+			data: {
+				action: 'listLivreurs'
+			},
+			dataType: 'json'
+		})
+				.done(function(data) {
+					var livreurs = data.livreurs;
+
+					var i;
+					for (i = 0; i < livreurs.length; i++) {
+						var livreur = livreurs[i];
+
+						var newRow   = table.insertRow(table.rows.length);
+
+						var nomCell  = newRow.insertCell(-1);
+						nomCell.appendChild(document.createTextNode(livreur.nom));
+
+						var statutCell  = newRow.insertCell(-1);
+						statutCell.appendChild(document.createTextNode(livreur.statut));
+
+						var departCell  = newRow.insertCell(-1);
+						departCell.appendChild(document.createTextNode(livreur.adresseDepart));
+
+						var arriveeCell  = newRow.insertCell(-1);
+						arriveeCell.appendChild(document.createTextNode(livreur.adresseArrivee));
+
+						var clientCell  = newRow.insertCell(-1);
+						clientCell.appendChild(document.createTextNode(livreur.client));
+
+						var commandeCell  = newRow.insertCell(-1);
+						commandeCell.appendChild(document.createTextNode(livreur.commande));
+
+						var idL = livreur.id;
+
+						if(livreur.statut == 1) {
+								var itiCell  = newRow.insertCell(-1);
+								var btn = document.createElement('input');
+									btn.type = "button";
+									btn.value = "Voir l'itinéraire";
+									btn.onclick = (function(idL) {return function() {chargerIti(idL);}})(idL);
+								itiCell.appendChild(btn);
+						} else {
+								var itiCell  = newRow.insertCell(-1);
+								itiCell.appendChild(document.createTextNode("-"));
+						}
+					}
+
+				})
+				.fail(function() {
+					//
+				})
+				.always(function() {
+					//
+				});
+}
+
+function chargerIti(idLivreur) {
+		$.ajax({
+			url: './ActionServlet',
+			type: 'POST',
+			data: {
+				action: 'recupItineraire',
+				idLivreur: idLivreur
+			},
+			dataType: 'json'
+		})
+				.done(function(data) {
+					var iti = data.itineraire;
+					var itiu = iti[0];
+
+					itineraires = [];
+					itineraires.push({
+              location: {lat: itiu.latitudeResto, lng: itiu.longitudeResto},
+              stopover: true
+            });
+
+					directionsService.route({
+		          origin: {lat: itiu.latitudeLivreur, lng: itiu.longitudeLivreur},
+		          destination: {lat: itiu.latitudeClient, lng: itiu.longitudeClient},
+		          waypoints: itineraires,
+							optimizeWaypoints: true,
+							travelMode: 'DRIVING'
+      		}, function(response, status) {
+		          if (status == 'OK') {
+		            directionsDisplay.setDirections(response);
+		          } else {
+		            window.alert('Directions request failed due to ' + status);
+		          }
+        	});
+
+				})
+				.fail(function() {
+					//
+				})
+				.always(function() {
+					//
+				});
 }

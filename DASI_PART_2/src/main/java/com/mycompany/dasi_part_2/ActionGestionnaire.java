@@ -13,6 +13,7 @@ import java.util.List;
 import metier.modele.Client;
 import metier.modele.Commande;
 import metier.modele.Drone;
+import metier.modele.Employe;
 import metier.modele.Livreur;
 import metier.modele.Produit;
 import metier.modele.Restaurant;
@@ -125,7 +126,7 @@ public class ActionGestionnaire {
        return json;
     }
        
-               static String getItineraire(String idLivreur) throws Exception {
+    static String getItineraire(String idLivreur) throws Exception {
                 ServiceMetier sm = new ServiceMetier();
                 Livreur livreur = sm.getLivreurById(Long.valueOf(idLivreur));
                 Restaurant resto = livreur.getCommandeEnCours().getRestaurant();
@@ -162,13 +163,80 @@ public class ActionGestionnaire {
         JsonArray jsonArray = new JsonArray();
         for(Livreur r : livreurs)
         {
-            JsonObject jsonLivreurs = new JsonObject();
-            
-            jsonLivreurs.addProperty("id",r.getId());
-            jsonLivreurs.addProperty("latitude",r.getLatitude());
-            jsonLivreurs.addProperty("longitude",r.getLongitude());
-            
-            jsonArray.add(jsonLivreurs);
+            if(r.getCommandeEnCours() != null) {
+                String contenuCommande = "";
+                for(Produit p : r.getCommandeEnCours().getListeProduit().keySet()) {
+                        contenuCommande += p.getDenomination() + " x" + r.getCommandeEnCours().getListeProduit().get(p) + " ";
+                }
+
+                if (r instanceof Employe) {
+                    Employe employe = (Employe) r;
+
+                    JsonObject jsonLivreurs = new JsonObject();
+
+                    jsonLivreurs.addProperty("id",r.getId());
+                    jsonLivreurs.addProperty("statut",r.getStatus());
+                    jsonLivreurs.addProperty("nom",employe.getNom() + " " + employe.getPrenom());
+                    jsonLivreurs.addProperty("client",r.getCommandeEnCours().getClient().getNom() + " " + r.getCommandeEnCours().getClient().getPrenom());
+                    jsonLivreurs.addProperty("adresseDepart",r.getCommandeEnCours().getRestaurant().getAdresse());
+                    jsonLivreurs.addProperty("adresseArrivee",r.getCommandeEnCours().getClient().getAdresse());
+                    jsonLivreurs.addProperty("commande",contenuCommande);
+                    jsonLivreurs.addProperty("latitude",r.getLatitude());
+                    jsonLivreurs.addProperty("longitude",r.getLongitude());
+
+                    jsonArray.add(jsonLivreurs);
+                } else {
+                    Drone drone = (Drone) r;
+
+                    JsonObject jsonLivreurs = new JsonObject();
+
+                    jsonLivreurs.addProperty("id",r.getId());
+                    jsonLivreurs.addProperty("statut",r.getStatus());
+                    jsonLivreurs.addProperty("nom",drone.getNumero());
+                    jsonLivreurs.addProperty("client",r.getCommandeEnCours().getClient().getNom() + " " + r.getCommandeEnCours().getClient().getPrenom());
+                    jsonLivreurs.addProperty("adresseDepart",r.getCommandeEnCours().getRestaurant().getAdresse());
+                    jsonLivreurs.addProperty("adresseArrivee",r.getCommandeEnCours().getClient().getAdresse());
+                    jsonLivreurs.addProperty("commande",contenuCommande);
+                    jsonLivreurs.addProperty("latitude",r.getLatitude());
+                    jsonLivreurs.addProperty("longitude",r.getLongitude());
+
+                    jsonArray.add(jsonLivreurs);
+                }
+            } else {
+                if (r instanceof Employe) {
+                    Employe employe = (Employe) r;
+
+                    JsonObject jsonLivreurs = new JsonObject();
+
+                    jsonLivreurs.addProperty("id",r.getId());
+                    jsonLivreurs.addProperty("statut",r.getStatus());
+                    jsonLivreurs.addProperty("nom",employe.getNom() + " " + employe.getPrenom());
+                    jsonLivreurs.addProperty("client","-");
+                    jsonLivreurs.addProperty("adresseDepart","-");
+                    jsonLivreurs.addProperty("adresseArrivee","-");
+                    jsonLivreurs.addProperty("commande","-");
+                    jsonLivreurs.addProperty("latitude",r.getLatitude());
+                    jsonLivreurs.addProperty("longitude",r.getLongitude());
+
+                    jsonArray.add(jsonLivreurs);
+                } else {
+                    Drone drone = (Drone) r;
+
+                    JsonObject jsonLivreurs = new JsonObject();
+
+                    jsonLivreurs.addProperty("id",r.getId());
+                    jsonLivreurs.addProperty("statut",r.getStatus());
+                    jsonLivreurs.addProperty("nom",drone.getNumero());
+                    jsonLivreurs.addProperty("client","-");
+                    jsonLivreurs.addProperty("adresseDepart","-");
+                    jsonLivreurs.addProperty("adresseArrivee","-");
+                    jsonLivreurs.addProperty("commande","-");
+                    jsonLivreurs.addProperty("latitude",r.getLatitude());
+                    jsonLivreurs.addProperty("longitude",r.getLongitude());
+
+                    jsonArray.add(jsonLivreurs);
+                }
+            }
         }
         
         

@@ -18,7 +18,7 @@
 		<div id="title" align="center" style="margin-bottom: 15px; margin-top: 15px;">Tableau de bord Gestionnaire</div>
 
 		<div id="tab" style="margin-bottom: 20px; margin-left: 5px; margin-right: 5px;">
-			<table border="1" style="width: 100%;">
+			<table id="tab" border="1" style="width: 100%;">
 				<tr bgcolor="Grey">
 					<th>Livreur</th>
 					<th>Statut</th>
@@ -28,16 +28,18 @@
 					<th>Livraison</th>
 					<th>Itinéraire</th>
 				</tr>
-				<tr>
-					<td>Jill</td>
-					<td>Smith</td>
-					<td>50</td>
-				</tr>
-				<tr>
-					<td>Eve</td>
-					<td>Jackson</td>
-					<td>94</td>
-				</tr>
+        <tbody>
+          <tr>
+  					<td>Jill</td>
+  					<td>Smith</td>
+  					<td>50</td>
+  				</tr>
+  				<tr>
+  					<td>Eve</td>
+  					<td>Jackson</td>
+  					<td>94</td>
+  				</tr>
+        </tbody>
 			</table>
 
 		</div>
@@ -52,7 +54,9 @@
 
 				<div style="width: 245px;"><input type="checkbox" id="voirClients" value="check1" onchange="chargerClients()"> Voir les clients </br></br></div>
 
-				<div style="width: 245px;"><input type="button" id="voirDrones" value="Voir validation des drones" style="width: 245px;" onclick="window.location.href='validationDrones.html'"></div>
+				<div style="width: 245px;"><input type="button" id="voirDrones" value="Voir validation des drones" style="width: 245px;" onclick="window.location.href='validationDrones.html'"></div></br>
+
+        <div style="width: 245px;"><input type="button" id="refreshTab" value="Rafraîchir Tableau" style="width: 245px;" onclick="chargerTab()"></div>
 			</div>
 		</div>
 

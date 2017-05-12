@@ -1,2 +1,5 @@
-com\mycompany\dasi_part_2\Action.class
+com\mycompany\dasi_part_2\ActionAccueil.class
+com\mycompany\dasi_part_2\ActionClient.class
 com\mycompany\dasi_part_2\ActionServlet.class
+com\mycompany\dasi_part_2\ActionGestionnaire.class
+com\mycompany\dasi_part_2\ActionLivreur.class
