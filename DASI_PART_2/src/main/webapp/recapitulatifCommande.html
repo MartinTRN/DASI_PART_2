@@ -5,32 +5,56 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width">
         <script src="//code.jquery.com/jquery-1.12.1.min.js"></script>
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="style.css">
     </head>
     <body>
+      <header>
+        <div class="text-center" style="font-size: 20px">Connexion > Séléction du restaurant >  Selection du menu > <b> Récapitulatif </b> > Confirmation </div>
+    </header>
     <div id="test"></div>
     
-    <h1>Resumé de la commande</h1>
+    <div class="container-fluid">
+    <h1 class="text-center">Resumé de votre commande</h1>
 
-     <div id='descRestaurant'>
+    <div class="row"> 
+    
+     <div class="col-md-6" id='descRestaurant'>
             <span>chargement en cours...</span>
      </div>
+        
+    </div> 
+    <div class="row">
+        <div class="col-md-6 ">
+            <h2 class="text-center">Vos produits commandés</h2>
+       
     
-    <h2>Vos produits commandés</h2>
-    
-    <div id="choixProduits">
-         <span>chargement en cours...</span>
+        <div id="choixProduits">
+             <span>chargement en cours...</span>
+        </div>
+     </div>
+   
+    <div class="col-md-6">
+            <h2 class=" text-center">Détails sur la livraison</h2>
+
+             <div id="detailLivraison" style="margin-top: 30px">
+                  <span>chargement en cours...</span>
+             </div>
+    </div> 
     </div>
     
-   <h2>Détails sur la livraison</h2>
-    
-    <div id="detailLivraison">
-         <span>chargement en cours...</span>
+    <div class="row">
+        <div class="col-md-9">
+                  <input type="button" id="annulerCommande" class="btn btn-default" value="Annuler la commande"> 
+        </div>
+        <div class="col-md-3 ">
+                  <input type="button" id="confirmerCommande" class="btn btn-default" value="Confirmer la commande"> 
+        </div>
     </div>
     
-    <input type="button" id="annulerCommande" value="Annuler la commande"> 
-    <input type="button" id="confirmerCommande" value="Confirmer la commande"> 
 
-
+    </div>
         <script>
             
             
